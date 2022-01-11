@@ -10,6 +10,7 @@ set(HEADERS
     ./Headers/AbstractVersion.hpp
     ./Headers/FirstVersion.hpp
     ./Headers/SecondVersion.hpp
+    ./Headers/Tests.hpp
     ./Headers/GeneratorTasks.hpp)
 
 set(SOURCES 
@@ -17,6 +18,7 @@ set(SOURCES
     ./Sources/FirstVersion.cpp
     ./Sources/SecondVersion.cpp
     ./Sources/GeneratorTasks.cpp
+    ./Sources/Tests.cpp
     ./Sources/main.cpp)
 
 
