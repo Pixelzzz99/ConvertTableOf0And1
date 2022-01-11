@@ -6,5 +6,5 @@ class SecondAlgorithm : public AbstractStrategy
     public:
     SecondAlgorithm(int, int, std::vector<std::vector<int>>);
     ~SecondAlgorithm() = default;
-    std::vector<int> solve();
+    std::vector<int> solve() override;
 };

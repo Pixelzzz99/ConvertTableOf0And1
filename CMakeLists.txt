@@ -9,12 +9,14 @@ include_directories(./Headers)
 set(HEADERS 
     ./Headers/AbstractVersion.hpp
     ./Headers/FirstVersion.hpp
-    ./Headers/SecondVersion.hpp)
+    ./Headers/SecondVersion.hpp
+    ./Headers/GeneratorTasks.hpp)
 
 set(SOURCES 
     ./Sources/AbstractVersion.cpp
     ./Sources/FirstVersion.cpp
     ./Sources/SecondVersion.cpp
+    ./Sources/GeneratorTasks.cpp
     ./Sources/main.cpp)
 
 
