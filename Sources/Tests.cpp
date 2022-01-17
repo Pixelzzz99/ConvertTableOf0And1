@@ -31,8 +31,10 @@ bool Tests::Run(){
     //this->setGeneratorTasks(200);
     //result = Test_First_Algorithm();
     //result = Test_Second_Algorithm();
-    this->setGeneratorTasks(100);
-    result = Test_Second_Algorithm();
+    //this->setGeneratorTasks(100);
+    //result = Test_Second_Algorithm();
+    //result = Tests_with_add_to_csv_file();
+    result = Tests_Second_Algorithm_with_add_to_csv_file();
     if(!result){
         std::cout<<"Tests Failed"<<std::endl;
         return false;
@@ -97,10 +99,6 @@ bool Tests::Test_Big()
 
 void Tests::setGeneratorTasks(int number)
 {
-    if (this->generatorTasks != nullptr)
-    {
-        delete this->generatorTasks;
-    }
     this->generatorTasks = new GeneratorTasks(number);
 }
 
@@ -123,7 +121,8 @@ bool Tests::Test_First_Algorithm(){
     return this->testPassed(test_name);
 }
 
-bool Tests::Test_Second_Algorithm(){
+bool Tests::Test_Second_Algorithm()
+{
     std::string test_name = "Test_Second_Algorithm";
     int n = this->generatorTasks->getN();
     int m = this->generatorTasks->getM();
@@ -142,6 +141,74 @@ bool Tests::Test_Second_Algorithm(){
     return this->testPassed(test_name);
 }
 
+bool Tests::Tests_with_add_to_csv_file()
+{
+    std::string test_name = "Test with added to csv file";
+    FILE *file = fopen("../test.csv", "w");
+    if (file == NULL)
+    {
+        std::cout<<"Error opening file"<<std::endl;
+        return false;
+    }
+    fprintf(file, "N,M,ResultFirst,ResultSecond,Time1,Time2\n");
+    for(int i=20; i < 600; i+=20)
+    {
+        this->setGeneratorTasks(i);
+        int n = this->generatorTasks->getN();
+        int m = this->generatorTasks->getM();
+        std::vector<std::vector<int>> matrix = this->generatorTasks->getMatrix();
+        FirstAlgorithm* first_version = new FirstAlgorithm(n, m, matrix);
+        unsigned int start_time = clock();
+        std::vector<int> first_result = first_version->solve();
+        unsigned int end_time = clock();
+        double time1 = (end_time - start_time)/double(CLOCKS_PER_SEC);
+        std::cout<<"First Algorithm Time: "<<time1<<std::endl;
+        delete first_version;
+        std::cout << "First Algorithm Result: " << first_result.size() << std::endl;
+        
+        SecondAlgorithm* second_version = new SecondAlgorithm(n, m, matrix);
+        start_time = clock();
+        std::vector<int> second_result = second_version->solve();
+        end_time = clock();
+        double time2 = (end_time - start_time)/double(CLOCKS_PER_SEC);
+        std::cout<<"Second Algorithm Time: "<<time2<<std::endl;
+        delete second_version;
+        std::cout << "Second Algorithm Result: " << second_result.size() << std::endl;
 
+        fprintf(file, "%d,%d,%d,%d,%f,%f\n", n, m, first_result.size(), second_result.size(), time1, time2);
+    }
+    fclose(file);
+    return this->testPassed(test_name);
+}
 
-
+bool Tests::Tests_Second_Algorithm_with_add_to_csv_file()
+{
+    std::string test_name = "Test Second Algorithm with added to csv file";
+    FILE *file = fopen("../SecondAlgorithm.csv", "a");
+    if(file == NULL)
+    {
+        std::cout<<"Error opening file"<<std::endl;
+        return false;
+    }
+    fprintf(file, "N,M,Result,Time\n");
+    for(int i=10000000; i<=100000000; i+=5000000)
+    {
+        std::cout<<"i: "<<i<<std::endl;
+        this->setGeneratorTasks(i);
+        int n = this->generatorTasks->getN();
+        int m = this->generatorTasks->getM();
+        std::vector<std::vector<int>> matrix = this->generatorTasks->getMatrix();
+        SecondAlgorithm* second_version = new SecondAlgorithm(n, m, matrix);
+        unsigned int start_time = clock();
+        std::vector<int> second_result = second_version->solve();
+        unsigned int end_time = clock();
+        double time = (end_time - start_time)/double(CLOCKS_PER_SEC);
+        std::cout<<"Second Algorithm Time: "<<time<<std::endl;
+        delete second_version;
+        std::cout << "Second Algorithm Result: " << second_result.size() << std::endl;
+        fprintf(file, "%d,%d,%d,%f\n\n", n, m, second_result.size(), time);        
+        delete this->generatorTasks;
+    }
+    fclose(file);
+    return this->testPassed(test_name);
+}
