@@ -9,6 +9,8 @@ SecondAlgorithm::SecondAlgorithm(int n, int m, std::vector<std::vector<int>> mat
 
 std::vector<int> SecondAlgorithm::solve()
 {
+    //iteration zero
+    this->count_iterations = 0;
     std::vector<int> r;
     std::vector<int> c;
     for (int i = 0; i < this->n; i++) r.push_back(i);
@@ -22,6 +24,8 @@ std::vector<int> SecondAlgorithm::solve()
             int cnt = 0;
             for (int posc : c)
             {
+                //iteration to count
+                this->count_iterations++;
                 cnt += this->matrix[r[i]][posc];
             }
             if(cnt > mx)
@@ -34,6 +38,8 @@ std::vector<int> SecondAlgorithm::solve()
         std::vector<int> newC;
         for (int posc : c)
         {
+            //iteration to count
+            this->count_iterations++;
             if(this->matrix[r[idDel]][posc] == 0)
             {
                 newC.push_back(posc);

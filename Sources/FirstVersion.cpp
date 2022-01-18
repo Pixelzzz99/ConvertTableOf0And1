@@ -15,6 +15,8 @@ std::vector<int> FirstAlgorithm::solve()
 
 std::vector<int> FirstAlgorithm::solve1()
 {
+    //iteration zero
+    this->count_iterations = 0;
     int mnAns = this->n + 1;
     int ansMask = -1;
     for (int mask = 0; mask < (1 << this->n); mask++)
@@ -28,6 +30,8 @@ std::vector<int> FirstAlgorithm::solve1()
             {
                 for(int j=0; j < m; j++)
                 {
+                    //iteration to count
+                    this->count_iterations++;
                     if(matrix[i][j] && !used[j])
                     {
                         used[j] = true;

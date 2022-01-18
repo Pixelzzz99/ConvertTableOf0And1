@@ -150,7 +150,7 @@ bool Tests::Tests_with_add_to_csv_file()
         std::cout<<"Error opening file"<<std::endl;
         return false;
     }
-    fprintf(file, "N,M,ResultFirst,ResultSecond,Time1,Time2\n");
+    fprintf(file, "N,M,ResultFirst,ResultSecond,Time1,Time2,Approx1,Approx2\n");
     for(int i=20; i < 600; i+=20)
     {
         this->setGeneratorTasks(i);
@@ -162,20 +162,25 @@ bool Tests::Tests_with_add_to_csv_file()
         std::vector<int> first_result = first_version->solve();
         unsigned int end_time = clock();
         double time1 = (end_time - start_time)/double(CLOCKS_PER_SEC);
+        double approx1 = (double)first_version->get_approximation(time1);
         std::cout<<"First Algorithm Time: "<<time1<<std::endl;
-        delete first_version;
+        std::cout<<"First Algorithm Approximation: "<<approx1<<std::endl;
         std::cout << "First Algorithm Result: " << first_result.size() << std::endl;
-        
+        delete first_version;
+
         SecondAlgorithm* second_version = new SecondAlgorithm(n, m, matrix);
         start_time = clock();
         std::vector<int> second_result = second_version->solve();
         end_time = clock();
         double time2 = (end_time - start_time)/double(CLOCKS_PER_SEC);
+        double approx2 = (double)second_version->get_approximation(time2);
         std::cout<<"Second Algorithm Time: "<<time2<<std::endl;
-        delete second_version;
+        std::cout<<"Second Algorithm Approximation: "<<approx2<<std::endl;
         std::cout << "Second Algorithm Result: " << second_result.size() << std::endl;
-
-        fprintf(file, "%d,%d,%d,%d,%f,%f\n", n, m, first_result.size(), second_result.size(), time1, time2);
+        delete second_version;
+        fprintf(file, "%d,%d,%d,%d,%f,%f,%f,%f\n", 
+                n, m, first_result.size(), second_result.size(), 
+                time1, time2, approx1, approx2);
     }
     fclose(file);
     return this->testPassed(test_name);
@@ -190,7 +195,7 @@ bool Tests::Tests_Second_Algorithm_with_add_to_csv_file()
         std::cout<<"Error opening file"<<std::endl;
         return false;
     }
-    fprintf(file, "N,M,Result,Time\n");
+    fprintf(file, "N,M,Result,Time,Approximation\n");
     for(int i=10000000; i<=100000000; i+=5000000)
     {
         std::cout<<"i: "<<i<<std::endl;
@@ -203,10 +208,12 @@ bool Tests::Tests_Second_Algorithm_with_add_to_csv_file()
         std::vector<int> second_result = second_version->solve();
         unsigned int end_time = clock();
         double time = (end_time - start_time)/double(CLOCKS_PER_SEC);
+        double approx = (double)second_version->get_approximation(time);
         std::cout<<"Second Algorithm Time: "<<time<<std::endl;
-        delete second_version;
+        std::cout<<"Second Algorithm Approximation: "<<approx<<std::endl;
         std::cout << "Second Algorithm Result: " << second_result.size() << std::endl;
-        fprintf(file, "%d,%d,%d,%f\n\n", n, m, second_result.size(), time);        
+        delete second_version;
+        fprintf(file, "%d,%d,%d,%f,%f\n\n", n, m, second_result.size(), time, approx);
         delete this->generatorTasks;
     }
     fclose(file);
